@@ -61,6 +61,12 @@ public class ItemCsvLoader {
                 default -> throw new DataLoadException(
                         "Ligne " + lineNumber + " : type inconnu '" + type + "'");
             };
+
+            /*
+            * The model constructors validate values (negative duration, empty title).
+            *We wrap their error to add the line number from the file.
+            *
+            * */
         } catch (IllegalArgumentException e) {
             throw new DataLoadException("Ligne " + lineNumber + " : " + e.getMessage(), e);
         }

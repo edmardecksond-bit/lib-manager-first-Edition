@@ -40,7 +40,8 @@ public class Library {
 
     public void borrowItem(Member member, String itemId) {
         Item item = findById(itemId);
-
+        /* Check the limit before borrowing, so the item is never marked as
+         borrowed if the member cannot receive it*/
         if (!member.canBorrow()) {
             throw new BorrowLimitExceededException(member.getName(), Member.MAX_BORROWS);
         }
@@ -51,6 +52,11 @@ public class Library {
 
     public void returnItem(Member member, String itemId) {
         Item item = findById(itemId);
+
+        /*
+        * Order matters: remove from the member first. If the member never
+        *borrowed this item, the exception stops us before the item's state changes.
+        * */
 
         member.removeBorrowedItem(item);
         item.returnItem();
